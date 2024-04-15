@@ -1,4 +1,4 @@
-package Capstone.example.IMPS;
+package com.Capstone.Imps;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

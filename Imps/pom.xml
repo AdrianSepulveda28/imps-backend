@@ -8,10 +8,10 @@
 		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>Capstone.example</groupId>
-	<artifactId>IMPS</artifactId>
+	<groupId>com.Capstone</groupId>
+	<artifactId>Imps</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>IMPS</name>
+	<name>Imps</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

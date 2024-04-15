@@ -1,4 +1,4 @@
-package Capstone.example.IMPS;
+package com.Capstone.Imps;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
