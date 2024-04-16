@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class impsApplication {
 
 	public static void main(String[] args) {
-        SpringApplication.run(impspplication.class, args);
+        SpringApplication.run(impsapplication.class, args);
         System.out.print("OKAY!");
     }
 }
