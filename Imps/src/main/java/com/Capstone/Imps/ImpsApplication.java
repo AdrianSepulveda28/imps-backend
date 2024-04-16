@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class impsApplication {
+public class ImpsApplication {
 
 	public static void main(String[] args) {
-        SpringApplication.run(impsapplication.class, args);
-        System.out.print("OKAY!");
-    }
+		SpringApplication.run(ImpsApplication.class, args);
+	}
+
 }

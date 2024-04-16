@@ -25,10 +25,10 @@ public class UserRegistrationEntity {
     private String email;
 
     
-    public RegistrationEntity() {
+    public UserRegistrationEntity() {
     }
 
-    public RegistrationEntity(String username, String password, String email) {
+    public UserRegistrationEntity(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -46,23 +46,23 @@ public class UserRegistrationEntity {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(Object object) {
+        this.username = (String) object;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(Object object) {
+        this.password = (String) object;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(Object object) {
+        this.email = (String) object;
     }
 }
