@@ -24,8 +24,7 @@ public class RegistrationEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // Constructors, getters, and setters
-    // Constructors
+    
     public RegistrationEntity() {
     }
 
@@ -35,7 +34,6 @@ public class RegistrationEntity {
         this.email = email;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
