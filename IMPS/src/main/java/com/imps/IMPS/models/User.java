@@ -10,6 +10,8 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
+    
+    private String userID;
 
     private String name;
     
@@ -18,6 +20,8 @@ public class User {
     private String email;
     
     private String token;
+    
+    private Boolean isAdmin;
 
     public Integer getId() {
         return id;
@@ -57,5 +61,21 @@ public class User {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 }
