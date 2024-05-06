@@ -31,7 +31,7 @@ public class UserController {
     	
     	try {
     		ServerResponse Response = new ServerResponse();
-    		Response.setStatus(false);
+    		Response.setStatus(true);
     		Response.setMessage("User created successfully.");
     		Response.setServerToken(null);
     		
@@ -66,13 +66,36 @@ public class UserController {
         return userRepository.findAll();
     }
     
+    @GetMapping(path = "/getid")
+    public @ResponseBody String getUserID(@RequestParam String name) {
+        // This returns a JSON or XML with the users
+        return userRepository.findByName(name).getUserID();
+    }
+    
     @GetMapping(path = "/userLogin")
-    public @ResponseBody boolean checkAuth(@RequestParam String username, 
+    public @ResponseBody ServerResponse checkAuth(@RequestParam String username, 
     		@RequestParam String password) {
+    	ServerResponse Response = new ServerResponse();
     	if(userRepository.findByUsernameAndPassword(username, password) != null) {
-    		return true;
+    		if(userRepository.checkAdmin(username, password) != null) {
+    			Response.setStatus(true);
+        		Response.setMessage("Admin login");
+        		Response.setServerToken(null);
+        		Response.setResults(null);
+        		return Response;
+    		}else {
+    		Response.setStatus(true);
+    		Response.setMessage("User login");
+    		Response.setServerToken(null);
+    		Response.setResults(null);
+    		return Response;
+    		}
     	}else {
-    		return false;
+    		Response.setStatus(false);
+    		Response.setMessage("Authentication failed.");
+    		Response.setServerToken(null);
+    		Response.setResults(null);
+    		return Response;
     	}
     }
     

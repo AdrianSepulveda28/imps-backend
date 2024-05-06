@@ -29,4 +29,26 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    
+    @Async
+    public void sendAccepted(String to, String requestID) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setFrom(sender);
+        message.setSubject("Print Request #" + requestID + " has been approved!");
+        message.setText("Print request #" + requestID + " has been approved. Please wait while your document is being processed.\n\nThis is an auto-generated email. Please do not reply.\n\nThanks,\nIMPS");
+
+        mailSender.send(message);
+    }
+    
+    @Async
+    public void sendRejected(String to, String requestID) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setFrom(sender);
+        message.setSubject("Print Request #" + requestID + " has been rejected");
+        message.setText("Print request #" + requestID + " has been rejected. Please go to 'Printing Records' for Request #" + requestID + " and check comments.\n\nThis is an auto-generated email. Please do not reply.\n\nThanks,\nIMPS");
+
+        mailSender.send(message);
+    }
 }

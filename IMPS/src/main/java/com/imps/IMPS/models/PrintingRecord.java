@@ -17,11 +17,15 @@ public class PrintingRecord {
 	
 	private String requestID;
 	
+	private String fileType;
+	
+	private String fileName;
+	
 	private LocalDate requestDate;
 	
 	private LocalDate useDate;
 	
-	private Integer status;
+	private String status;
 
 	public String getRequestID() {
 		return requestID;
@@ -47,11 +51,11 @@ public class PrintingRecord {
 		this.useDate = useDate;
 	}
 
-	public Integer getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -61,6 +65,22 @@ public class PrintingRecord {
 
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 }
