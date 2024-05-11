@@ -1,5 +1,6 @@
 package com.imps.IMPS.controllers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.imps.IMPS.models.ServerResponse;
 import com.imps.IMPS.models.User;
+import com.imps.IMPS.models.UserResponse;
 import com.imps.IMPS.repositories.UserRepository;
 import com.imps.IMPS.EmailService;
 
@@ -24,37 +26,50 @@ public class UserController {
     }
 
     @PostMapping(path = "/NewUserRegistration")
-    public @ResponseBody ServerResponse addNewUser(@RequestParam String name
+    public @ResponseBody UserResponse addNewUser(@RequestParam String name
             , @RequestParam String password, @RequestParam String email) {
-        // @ResponseBody means the returned User is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
     	
     	try {
-    		ServerResponse Response = new ServerResponse();
-    		Response.setStatus(true);
-    		Response.setMessage("User created successfully.");
-    		Response.setServerToken(null);
-    		
     		List<User> Created = new ArrayList<>();
+    		String month;
+    		String userNumber;
+    		
+    		// Generating userID logic.
+    		if(LocalDate.now().getMonthValue() < 10) {
+    			month = "0" + Integer.toString(LocalDate.now().getMonthValue());
+    		}else {
+    			month = Integer.toString(LocalDate.now().getMonthValue());
+    		}
+    		
+    		if(userRepository.getAll().size() < 100) {
+    			if (userRepository.getAll().size() < 10) {
+    				userNumber = "00" + Integer.toString(userRepository.getAll().size() + 1);
+    			}else {
+    				userNumber = "0" + Integer.toString(userRepository.getAll().size() + 1);
+    			}
+    		}else {
+    			userNumber = Integer.toString(userRepository.getAll().size() + 1);
+    		}
+    		
+    		// Final userID String.
+    		String userID = Integer.toString(LocalDate.now().getYear()) + month + userNumber; 
     		
     		User IMPSUser = new User();
             IMPSUser.setName(name);
             IMPSUser.setEmail(email);
             IMPSUser.setPassword(password);
             IMPSUser.setToken("b457sdbfjsdf");
+            IMPSUser.setIsAdmin(false);
+            IMPSUser.setUserID(userID);
+            Created.add(IMPSUser);
             userRepository.save(IMPSUser);
             
-            Created.add(IMPSUser);
-            Response.setResults(Created);
-            
+    		UserResponse Response = new UserResponse(true, "User created successfully", null, Created);
+
             return Response;
     	}catch(Exception e) {
-    		ServerResponse Error = new ServerResponse();
-    		Error.setStatus(false);
-    		Error.setMessage("Unable to create new user.");
-    		Error.setServerToken(null);
-    		Error.setResults(null);
-    		
+    		UserResponse Error = new UserResponse(false, "Unable to create new user.", null, null);
+
     		return Error;
     	}
         
@@ -62,14 +77,17 @@ public class UserController {
 
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<User> getAllUsers() {
-        // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
     
     @GetMapping(path = "/getid")
     public @ResponseBody String getUserID(@RequestParam String name) {
-        // This returns a JSON or XML with the users
         return userRepository.findByName(name).getUserID();
+    }
+    
+    @GetMapping(path = "/getemail")
+    public @ResponseBody User getEmail(@RequestParam String name) {
+        return userRepository.findByName(name);
     }
     
     @GetMapping(path = "/userLogin")
@@ -81,20 +99,17 @@ public class UserController {
     			Response.setStatus(true);
         		Response.setMessage("Admin login");
         		Response.setServerToken(null);
-        		Response.setResults(null);
         		return Response;
     		}else {
     		Response.setStatus(true);
     		Response.setMessage("User login");
     		Response.setServerToken(null);
-    		Response.setResults(null);
     		return Response;
     		}
     	}else {
     		Response.setStatus(false);
     		Response.setMessage("Authentication failed.");
     		Response.setServerToken(null);
-    		Response.setResults(null);
     		return Response;
     	}
     }

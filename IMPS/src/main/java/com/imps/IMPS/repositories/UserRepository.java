@@ -1,5 +1,7 @@
 package com.imps.IMPS.repositories;
 
+import java.util.ArrayList;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,6 +22,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	
 	@Query(value = "SELECT * FROM USER WHERE NAME = ?1", nativeQuery = true)
 	User findByName(String name);
+	
+	@Query(value = "SELECT * FROM USER", nativeQuery = true)
+	ArrayList<User> getAll();
 	
 	@Modifying
 	@Transactional

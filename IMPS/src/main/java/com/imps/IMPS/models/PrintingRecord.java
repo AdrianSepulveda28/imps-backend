@@ -1,6 +1,8 @@
 package com.imps.IMPS.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,11 +23,25 @@ public class PrintingRecord {
 	
 	private String fileName;
 	
-	private LocalDate requestDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date requestDate;
 	
-	private LocalDate useDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date useDate;
 	
 	private String status;
+	
+	public PrintingRecord () {}
+	
+	public PrintingRecord (String userID, String requestID, String fileType, String fileName, Date requestDate, Date useDate, String status) {
+		this.setUserID(userID);
+		this.setRequestID(requestID);
+		this.setFileType(fileType);
+		this.setFileName(fileName);
+		this.setRequestDate(requestDate);
+		this.setUseDate(useDate);
+		this.setStatus(status);
+	}
 
 	public String getRequestID() {
 		return requestID;
@@ -35,19 +51,19 @@ public class PrintingRecord {
 		this.requestID = requestID;
 	}
 
-	public LocalDate getRequestDate() {
+	public Date getRequestDate() {
 		return requestDate;
 	}
 
-	public void setRequestDate(LocalDate requestDate) {
+	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
 
-	public LocalDate getUseDate() {
+	public Date getUseDate() {
 		return useDate;
 	}
 
-	public void setUseDate(LocalDate useDate) {
+	public void setUseDate(Date useDate) {
 		this.useDate = useDate;
 	}
 

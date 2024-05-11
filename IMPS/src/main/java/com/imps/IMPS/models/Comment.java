@@ -1,6 +1,7 @@
 package com.imps.IMPS.models;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,32 +9,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Notification {
+public class Comment {
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 	
 	private String requestID;
 	
-	private String userID;
-	
 	private String header;
 	
 	private String content;
 	
-	private Date createdDate;
+	private String sentBy;
 	
-	private Boolean isRead;
+	private Date sentDate;
 	
-	public Notification() {}
+	public Comment() {}
 	
-	public Notification (String requestID, String userID, String header, String content, Date createdDate) {
+	public Comment(String requestID, String header, String content, String sentBy, Date sentDate) {
 		this.setRequestID(requestID);
-		this.setUserID(userID);
 		this.setHeader(header);
 		this.setContent(content);
-		this.setCreatedDate(createdDate);
-		this.setIsRead(false);
+		this.setSentBy(sentBy);
+		this.setSentDate(sentDate);
 	}
 
 	public String getRequestID() {
@@ -60,27 +58,19 @@ public class Notification {
 		this.content = content;
 	}
 
-	public String getUserID() {
-		return userID;
+	public String getSentBy() {
+		return sentBy;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setSentBy(String sentBy) {
+		this.sentBy = sentBy;
 	}
 
-	public Boolean getIsRead() {
-		return isRead;
+	public Date getSentDate() {
+		return sentDate;
 	}
 
-	public void setIsRead(Boolean isRead) {
-		this.isRead = isRead;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	public void setSentDate(Date sentDate) {
+		this.sentDate = sentDate;
 	}
 }

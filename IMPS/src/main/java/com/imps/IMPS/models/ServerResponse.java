@@ -1,17 +1,14 @@
 package com.imps.IMPS.models;
 
-import java.util.List;
-
 public class ServerResponse {
-	private boolean status;
+	private Boolean status;
 	private String message;
 	private String serverToken;
-	private List<User> results;
 	
-	public boolean isStatus() {
+	public Boolean isStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 	public String getMessage() {
@@ -25,12 +22,5 @@ public class ServerResponse {
 	}
 	public void setServerToken(String serverToken) {
 		this.serverToken = serverToken;
-	}
-	public List<User> getResults() {
-		return results;
-	}
-	
-	public void setResults(List<User> UserList) {
-		this.results = UserList;
 	}
 }
