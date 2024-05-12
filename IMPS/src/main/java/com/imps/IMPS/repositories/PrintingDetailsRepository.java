@@ -13,6 +13,9 @@ public interface PrintingDetailsRepository extends CrudRepository<PrintingDetail
 	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE requestid = ?1 AND file_name = ?2", nativeQuery = true)
 	PrintingDetails findByID(String requestID, String fileName);
 	
+	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE requestid = ?1", nativeQuery = true)
+	PrintingDetails getID(String requestID);
+	
 	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE file_type = 'Module' AND request_date > ?1", nativeQuery = true)
 	ArrayList<PrintingDetails> getModules(String requestDate);
 	

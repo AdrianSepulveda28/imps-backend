@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imps.IMPS.EmailService;
+import com.imps.IMPS.models.Notification;
 import com.imps.IMPS.models.PrintingRecord;
 import com.imps.IMPS.models.RecordResponse;
+import com.imps.IMPS.repositories.NotificationRepository;
 import com.imps.IMPS.repositories.PrintingRecordsRepository;
 
 @CrossOrigin
@@ -36,6 +38,9 @@ public class RecordController {
 	@Autowired
     private PrintingRecordsRepository recordRepository;
     private EmailService emailService;
+    
+    @Autowired
+	private NotificationRepository notificationRepository;
     
     public RecordController(EmailService emailService) {
     	this.emailService = emailService;
@@ -107,19 +112,41 @@ public class RecordController {
 			}
 	 }
     
-    @PostMapping(path = "/changeStatus")
-    public @ResponseBody boolean setNewPassword(@RequestParam String requestID,
-    		@RequestParam String status, @RequestParam String email) {
+    @PostMapping(path = "/rejectedStatus")
+    public @ResponseBody boolean setRejected(@RequestParam String requestID,
+    		@RequestParam String status, @RequestParam String email, @RequestParam String userID,
+    		@RequestParam Date date) {
     	
     	recordRepository.setNewStatus(requestID, status);
+    	emailService.sendEmail(email, "IMPS | Request #" + requestID + " Status Update","Hello, your printing request with ID #" + requestID + " has been REJECTED. Please check the comment under the request details regarding why.");
+    	Notification notification = new Notification(requestID, userID, "Request Rejected!", "Please check the most recent comment on your request to know why your request was rejected.", date, false);
+    	notificationRepository.save(notification);
     	
-    	if (status == "Rejected") {
-    		emailService.sendEmail(email, "Request #" + requestID + "Status Update","Hello, your printing request with ID #" + requestID + "has been REJECTED. Please check the comment under the request details regarding why.");
-    	}else if(status == "In Progress") {
-    		emailService.sendEmail(email, "Request #" + requestID + "Status Update","Hello, your printing request with ID #" + requestID + "is now IN PROGRESS. Please wait until the request is completed.");
-    	}else if(status == "Completed") {
-    		emailService.sendEmail(email, "Request #" + requestID + "Status Update","Hello, your printing request with ID #" + requestID + "is now COMPLETED. Please approach the office during operating hours to claim your documents.");
-    	}
+    	return true;
+    }
+    
+    @PostMapping(path = "/acceptedStatus")
+    public @ResponseBody boolean setAccepted(@RequestParam String requestID,
+    		@RequestParam String status, @RequestParam String email, @RequestParam String userID,
+    		@RequestParam Date date) {
+    	
+    	recordRepository.setNewStatus(requestID, status);
+    	emailService.sendEmail(email, "IMPS | Request #" + requestID + " Status Update","Hello, your printing request with ID #" + requestID + " is now IN PROGRESS. Please wait until the request is completed.");
+    	Notification notification = new Notification(requestID, userID, "Request In Progress!", "Your request has been accepted and is now being processed. Please wait for a notification of its completion.", date, false);
+    	notificationRepository.save(notification);
+    	
+    	return true;
+    }
+    
+    @PostMapping(path = "/completedStatus")
+    public @ResponseBody boolean setCompleted(@RequestParam String requestID,
+    		@RequestParam String status, @RequestParam String email, @RequestParam String userID,
+    		@RequestParam Date date) {
+    	
+    	recordRepository.setNewStatus(requestID, status);
+    	emailService.sendEmail(email, "IMPS | Request #" + requestID + " Status Update","Hello, your printing request with ID #" + requestID + " is now COMPLETED. Please approach the office during operating hours to claim your documents.");
+    	Notification notification = new Notification(requestID, userID, "Request Completed!", "Your request has been processed. You may proceed to the office at your earliest convenience.", date, false);
+    	notificationRepository.save(notification);
     	
     	return true;
     }
