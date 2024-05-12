@@ -82,13 +82,22 @@ public class UserController {
     }
     
     @GetMapping(path = "/getid")
-    public @ResponseBody String getUserID(@RequestParam String email) {
-        return userRepository.findByEmail(email).getUserID();
+    public @ResponseBody User getUserID(@RequestParam String email) {
+        return userRepository.findByEmail(email);
     }
     
     @GetMapping(path = "/getname")
     public @ResponseBody User getEmail(@RequestParam String email) {
         return userRepository.findByEmail(email);
+    }
+    
+    @GetMapping(path = "/checkAdmin")
+    public @ResponseBody Boolean checkAdmin(@RequestParam String email) {
+    	if(userRepository.checkAdminEmail(email) != null) {
+    		return true;
+    	}else {
+    		return false;
+    	}
     }
     
     @GetMapping(path = "/userLogin")
@@ -114,6 +123,8 @@ public class UserController {
     		return Response;
     	}
     }
+    
+    
     
     @PostMapping(path = "/ForgotPasswordStep1")
     public @ResponseBody boolean forgotPassword(@RequestParam String email) {

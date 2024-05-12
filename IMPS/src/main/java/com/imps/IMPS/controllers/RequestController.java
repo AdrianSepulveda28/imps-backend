@@ -73,6 +73,11 @@ public class RequestController {
         return printingDetailsRepository.findByID(id, fileName);
     }
 	
+	@GetMapping(path = "/download")
+    public @ResponseBody PrintingDetails getDownloadURLByID(@RequestParam String id, @RequestParam String fileName) {
+        return printingDetailsRepository.findByID(id, fileName);
+    }
+	
 	@GetMapping(path = "/getModuleCopies")
     public @ResponseBody Integer getModuleCopies(String dates) {
     	Integer total = 0;
@@ -86,7 +91,7 @@ public class RequestController {
 	@GetMapping(path = "/getOfficeFormCopies")
     public @ResponseBody Integer getOfficeFormCopies(String dates) {
     	Integer total = 0;
-    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    	for (PrintingDetails p : printingDetailsRepository.getOfficeForms(dates)) {
     		total += p.getNoOfCopies();
     	}
     	
@@ -96,17 +101,17 @@ public class RequestController {
 	@GetMapping(path = "/getManualCopies")
     public @ResponseBody Integer getManualCopies(String dates) {
     	Integer total = 0;
-    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    	for (PrintingDetails p : printingDetailsRepository.getManuals(dates)) {
     		total += p.getNoOfCopies();
     	}
     	
     	return total;
     }
 	
-	@GetMapping(path = "/getModuleCopies")
-    public @ResponseBody Integer getModuleCopies(String dates) {
+	@GetMapping(path = "/getExamCopies")
+    public @ResponseBody Integer getExamCopies(String dates) {
     	Integer total = 0;
-    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    	for (PrintingDetails p : printingDetailsRepository.getExams(dates)) {
     		total += p.getNoOfCopies();
     	}
     	

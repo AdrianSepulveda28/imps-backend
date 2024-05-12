@@ -13,15 +13,15 @@ public interface PrintingDetailsRepository extends CrudRepository<PrintingDetail
 	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE requestid = ?1 AND file_name = ?2", nativeQuery = true)
 	PrintingDetails findByID(String requestID, String fileName);
 	
-	@Query(value = "SELECT * FROM PRINTING_RECORD WHERE file_type = 'Module' AND request_date > ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE file_type = 'Module' AND request_date > ?1", nativeQuery = true)
 	ArrayList<PrintingDetails> getModules(String requestDate);
 	
-	@Query(value = "SELECT * FROM PRINTING_RECORD WHERE file_type = 'Office Form' AND request_date > ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE file_type = 'Office Form' AND request_date > ?1", nativeQuery = true)
 	ArrayList<PrintingDetails> getOfficeForms(String requestDate);
 	
-	@Query(value = "SELECT * FROM PRINTING_RECORD WHERE file_type = 'Manual' AND request_date > ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE file_type = 'Manual' AND request_date > ?1", nativeQuery = true)
 	ArrayList<PrintingDetails> getManuals(String requestDate);
 	
-	@Query(value = "SELECT * FROM PRINTING_RECORD WHERE file_type = 'Exam' AND request_date > ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM PRINTING_DETAILS WHERE file_type = 'Exam' AND request_date > ?1", nativeQuery = true)
 	ArrayList<PrintingDetails> getExams(String requestDate);
 }
