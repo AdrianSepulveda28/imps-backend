@@ -25,15 +25,18 @@ public class Notification {
 	
 	private Boolean isRead;
 	
+	private Boolean forAdmin;
+	
 	public Notification() {}
 	
-	public Notification (String requestID, String userID, String header, String content, Date createdDate) {
+	public Notification (String requestID, String userID, String header, String content, Date createdDate, Boolean forAdmin) {
 		this.setRequestID(requestID);
 		this.setUserID(userID);
 		this.setHeader(header);
 		this.setContent(content);
 		this.setCreatedDate(createdDate);
 		this.setIsRead(false);
+		this.setForAdmin(forAdmin);
 	}
 
 	public String getRequestID() {
@@ -82,5 +85,13 @@ public class Notification {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public Boolean getForAdmin() {
+		return forAdmin;
+	}
+
+	public void setForAdmin(Boolean forAdmin) {
+		this.forAdmin = forAdmin;
 	}
 }

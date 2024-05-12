@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/NewUserRegistration")
-    public @ResponseBody UserResponse addNewUser(@RequestParam String name
+    public @ResponseBody UserResponse addNewUser(@RequestParam String firstName, @RequestParam String lastName
             , @RequestParam String password, @RequestParam String email) {
     	
     	try {
@@ -55,7 +55,8 @@ public class UserController {
     		String userID = Integer.toString(LocalDate.now().getYear()) + month + userNumber; 
     		
     		User IMPSUser = new User();
-            IMPSUser.setName(name);
+            IMPSUser.setFirstName(firstName);
+            IMPSUser.setLastName(lastName);
             IMPSUser.setEmail(email);
             IMPSUser.setPassword(password);
             IMPSUser.setToken("b457sdbfjsdf");
@@ -81,21 +82,21 @@ public class UserController {
     }
     
     @GetMapping(path = "/getid")
-    public @ResponseBody String getUserID(@RequestParam String name) {
-        return userRepository.findByName(name).getUserID();
+    public @ResponseBody String getUserID(@RequestParam String email) {
+        return userRepository.findByEmail(email).getUserID();
     }
     
-    @GetMapping(path = "/getemail")
-    public @ResponseBody User getEmail(@RequestParam String name) {
-        return userRepository.findByName(name);
+    @GetMapping(path = "/getname")
+    public @ResponseBody User getEmail(@RequestParam String email) {
+        return userRepository.findByEmail(email);
     }
     
     @GetMapping(path = "/userLogin")
-    public @ResponseBody ServerResponse checkAuth(@RequestParam String username, 
+    public @ResponseBody ServerResponse checkAuth(@RequestParam String email, 
     		@RequestParam String password) {
     	ServerResponse Response = new ServerResponse();
-    	if(userRepository.findByUsernameAndPassword(username, password) != null) {
-    		if(userRepository.checkAdmin(username, password) != null) {
+    	if(userRepository.findByEmailAndPassword(email, password) != null) {
+    		if(userRepository.checkAdmin(email, password) != null) {
     			Response.setStatus(true);
         		Response.setMessage("Admin login");
         		Response.setServerToken(null);

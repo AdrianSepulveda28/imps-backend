@@ -11,11 +11,11 @@ import com.imps.IMPS.models.User;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 	
-	@Query(value = "SELECT * FROM USER WHERE NAME = ?1 AND PASSWORD = ?2", nativeQuery = true)
-	User findByUsernameAndPassword(String username, String password);
+	@Query(value = "SELECT * FROM USER WHERE EMAIL = ?1 AND PASSWORD = ?2", nativeQuery = true)
+	User findByEmailAndPassword(String email, String password);
 	
-	@Query(value = "SELECT * FROM USER WHERE NAME = ?1 AND PASSWORD = ?2 AND is_admin = 1", nativeQuery = true)
-	User checkAdmin(String username, String password);
+	@Query(value = "SELECT * FROM USER WHERE EMAIL = ?1 AND PASSWORD = ?2 AND is_admin = 1", nativeQuery = true)
+	User checkAdmin(String email, String password);
 	
 	@Query(value = "SELECT * FROM USER WHERE EMAIL = ?1", nativeQuery = true)
 	User findByEmail(String email);
@@ -38,5 +38,10 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Transactional
 	@Query(value = "UPDATE USER u SET u.password = ?1 WHERE EMAIL = ?2 and Token = ?3", nativeQuery = true)
 	int setNewPassword(String password, String email, String token);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE USER u SET u.password = ?1 WHERE EMAIL = ?2 and Token = ?3", nativeQuery = true)
+	int setNewFirstName(String password, String email, String token);
 	
 }

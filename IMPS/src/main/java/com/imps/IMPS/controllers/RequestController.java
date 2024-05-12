@@ -50,9 +50,8 @@ public class RequestController {
 	   
 			try{
 				PrintingDetails request = new PrintingDetails(userID, requestID, fileName, fileType, desc, noOfCopies, colored, stapled, giveExam, paperSize, bindType, requestDate, java.time.LocalDateTime.now(), useDate, name, email, number, department, downloadURL);
-				Notification notification = new Notification(requestID, userID, "New Request Created!", "You have successfully created a new request and is currently pending for approval.", requestDate);
+				Notification notification = new Notification(requestID, userID, "New Request Created!", "You have successfully created a new request and it is currently pending for approval.", requestDate, false);
 				PrintingRecord newRecord = new PrintingRecord(userID, requestID, fileType, fileName, requestDate, useDate, "Pending");
-				
 				
 				printingDetailsRepository.save(request);
 				recordRepository.save(newRecord);
@@ -74,6 +73,45 @@ public class RequestController {
         return printingDetailsRepository.findByID(id, fileName);
     }
 	
+	@GetMapping(path = "/getModuleCopies")
+    public @ResponseBody Integer getModuleCopies(String dates) {
+    	Integer total = 0;
+    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    		total += p.getNoOfCopies();
+    	}
+    	
+    	return total;
+    }
+	
+	@GetMapping(path = "/getOfficeFormCopies")
+    public @ResponseBody Integer getOfficeFormCopies(String dates) {
+    	Integer total = 0;
+    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    		total += p.getNoOfCopies();
+    	}
+    	
+    	return total;
+    }
+	
+	@GetMapping(path = "/getManualCopies")
+    public @ResponseBody Integer getManualCopies(String dates) {
+    	Integer total = 0;
+    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    		total += p.getNoOfCopies();
+    	}
+    	
+    	return total;
+    }
+	
+	@GetMapping(path = "/getModuleCopies")
+    public @ResponseBody Integer getModuleCopies(String dates) {
+    	Integer total = 0;
+    	for (PrintingDetails p : printingDetailsRepository.getModules(dates)) {
+    		total += p.getNoOfCopies();
+    	}
+    	
+    	return total;
+    }
 	
 }
 
