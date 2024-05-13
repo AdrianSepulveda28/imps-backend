@@ -3,13 +3,17 @@ package com.imps.IMPS.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.imps.IMPS.models.HomeDetails;
 import com.imps.IMPS.models.ServerResponse;
 import com.imps.IMPS.models.User;
 import com.imps.IMPS.models.UserResponse;
+import com.imps.IMPS.repositories.HomeRepository;
 import com.imps.IMPS.repositories.UserRepository;
 import com.imps.IMPS.EmailService;
 
@@ -21,15 +25,24 @@ public class UserController {
     private UserRepository userRepository;
     private EmailService emailService;
     
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    
+    @Autowired
+    private HomeRepository homeRepository;
+    
     public UserController(EmailService emailService) {
     	this.emailService = emailService;
     }
+  
 
     @PostMapping(path = "/NewUserRegistration")
     public @ResponseBody UserResponse addNewUser(@RequestParam String firstName, @RequestParam String lastName
             , @RequestParam String password, @RequestParam String email) {
     	
     	try {
+    		String token = UUID.randomUUID().toString().replaceAll("-", "");
+    		
+    		
     		if(userRepository.findByEmail(email)!=null) {
     			UserResponse Response = new UserResponse(false, "User email already exists!", null, null);
 
@@ -63,8 +76,8 @@ public class UserController {
                 IMPSUser.setFirstName(firstName);
                 IMPSUser.setLastName(lastName);
                 IMPSUser.setEmail(email);
-                IMPSUser.setPassword(password);
-                IMPSUser.setToken("b457sdbfjsdf");
+                IMPSUser.setPassword(encoder.encode(password));
+                IMPSUser.setToken(token);
                 IMPSUser.setIsAdmin(false);
                 IMPSUser.setUserID(userID);
                 Created.add(IMPSUser);
@@ -85,8 +98,20 @@ public class UserController {
 
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.All();
     }
+    
+    @GetMapping(path = "/encrypt")
+    public @ResponseBody String testEncrypt(@RequestParam String input) {
+        return encoder.encode(input);
+    }
+    
+    @GetMapping(path = "/decrypt")
+    public @ResponseBody Boolean testDecrypt(@RequestParam String input, @RequestParam String test) {
+        return encoder.matches(input, test);
+    }
+    
+    
     
     @GetMapping(path = "/getid")
     public @ResponseBody User getUserID(@RequestParam String email) {
@@ -111,8 +136,8 @@ public class UserController {
     public @ResponseBody ServerResponse checkAuth(@RequestParam String email, 
     		@RequestParam String password) {
     	ServerResponse Response = new ServerResponse();
-    	if(userRepository.findByEmailAndPassword(email, password) != null) {
-    		if(userRepository.checkAdmin(email, password) != null) {
+    	if(encoder.matches(password, userRepository.findByEmail(email).getPassword())==true) {
+    		if(userRepository.checkAdminEmail(email) != null) {
     			Response.setStatus(true);
         		Response.setMessage("Admin login");
         		Response.setServerToken(null);
@@ -134,7 +159,7 @@ public class UserController {
     @GetMapping(path = "/checkAuth")
     public @ResponseBody Boolean checkAuthByPass(@RequestParam String email, 
     		@RequestParam String password) {
-    	if(userRepository.findByEmailAndPassword(email, password) != null) {
+    	if(encoder.matches(password, userRepository.findByEmail(email).getPassword())==true) {	
     		return true;
     	}else {
     		return false;
@@ -145,7 +170,7 @@ public class UserController {
     
     @PostMapping(path = "/ForgotPasswordStep1")
     public @ResponseBody boolean forgotPassword(@RequestParam String email) {
-    	String token = "s4mpleT0k3N";
+    	String token = UUID.randomUUID().toString().replaceAll("-", "");
     	userRepository.setNewToken(email, token);
     	emailService.sendEmail(email, "IMPS Password Reset Token","Hello, here is your password reset token: " + token);
     	return true;
@@ -173,14 +198,14 @@ public class UserController {
     @PostMapping(path = "/ForgotPasswordStep3")
     public @ResponseBody boolean setNewPassword(@RequestParam String email,
     		@RequestParam String token, @RequestParam String password) {
-    	userRepository.setNewPassword(password, email, token);
+    	userRepository.setNewPassword(encoder.encode(password), email, token);
     	emailService.sendEmail(email, "IMPS Password Reset","Hello, your password has been successfully changed.");
     	return true;
     }
     
     @PostMapping(path = "/newPassword")
     public @ResponseBody boolean setPassword(@RequestParam String email, @RequestParam String password) {
-    	userRepository.setNewPasswordNoToken(password, email);
+    	userRepository.setNewPasswordNoToken(encoder.encode(password), email);
     	emailService.sendEmail(email, "IMPS Password Change","Hello, your password has been successfully changed.");
     	return true;
     }
@@ -200,6 +225,34 @@ public class UserController {
     	return true;
     }
     
+    @PostMapping(path = "/createHome")
+    public @ResponseBody boolean setHome(@RequestParam String ann, @RequestParam String guide, @RequestParam String loc,
+    		@RequestParam String pro, @RequestParam String upd) {
+    		HomeDetails home = new HomeDetails(ann,guide,pro,loc,upd);
+        	homeRepository.save(home);
+        	return true;
+    }
+    
+    @GetMapping(path = "/getHome")
+    public @ResponseBody HomeDetails getHome() {
+    	return homeRepository.findByID(homeRepository.getAll().size());
+    }
+    
+    @GetMapping(path = "/getHomeNumber")
+    public @ResponseBody Integer getHomeNumber() {
+    	return homeRepository.getAll().size();
+    }
+    
+    @PostMapping(path = "/editHome")
+    public @ResponseBody HomeDetails editHome(@RequestParam String ann, @RequestParam String guide, @RequestParam String loc,
+    		@RequestParam String pro, @RequestParam String upd) {
+    	homeRepository.setAnnouncements(ann, 1);
+    	homeRepository.setGuidelines(guide, 1);
+    	homeRepository.setLocations(loc, 1);
+    	homeRepository.setProcess(pro, 1);
+    	homeRepository.setUpdates(upd, 1);
+    	return homeRepository.findByID(1);
+    }
     
 
 }

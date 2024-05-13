@@ -29,6 +29,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query(value = "SELECT * FROM USER", nativeQuery = true)
 	ArrayList<User> getAll();
 	
+	@Query(value = "SELECT * FROM USER WHERE is_admin != 1", nativeQuery = true)
+	Iterable<User> All();
+	
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE USER u SET u.Token = ?2 WHERE EMAIL = ?1", nativeQuery = true)
