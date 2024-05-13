@@ -44,7 +44,22 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE USER u SET u.password = ?1 WHERE EMAIL = ?2 and Token = ?3", nativeQuery = true)
-	int setNewFirstName(String password, String email, String token);
+	@Query(value = "UPDATE USER u SET u.password = ?1 WHERE EMAIL = ?2", nativeQuery = true)
+	int setNewPasswordNoToken(String password, String email);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE USER u SET u.first_name = ?1 WHERE EMAIL = ?2", nativeQuery = true)
+	int setNewFirstName(String name, String email);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE USER u SET u.last_name = ?1 WHERE EMAIL = ?2", nativeQuery = true)
+	int setNewLastName(String name, String email);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE USER u SET u.email = ?1 WHERE EMAIL = ?2", nativeQuery = true)
+	int setNewEmail(String newEmail, String email);
 	
 }

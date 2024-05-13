@@ -30,44 +30,51 @@ public class UserController {
             , @RequestParam String password, @RequestParam String email) {
     	
     	try {
-    		List<User> Created = new ArrayList<>();
-    		String month;
-    		String userNumber;
-    		
-    		// Generating userID logic.
-    		if(LocalDate.now().getMonthValue() < 10) {
-    			month = "0" + Integer.toString(LocalDate.now().getMonthValue());
-    		}else {
-    			month = Integer.toString(LocalDate.now().getMonthValue());
-    		}
-    		
-    		if(userRepository.getAll().size() < 100) {
-    			if (userRepository.getAll().size() < 10) {
-    				userNumber = "00" + Integer.toString(userRepository.getAll().size() + 1);
-    			}else {
-    				userNumber = "0" + Integer.toString(userRepository.getAll().size() + 1);
-    			}
-    		}else {
-    			userNumber = Integer.toString(userRepository.getAll().size() + 1);
-    		}
-    		
-    		// Final userID String.
-    		String userID = Integer.toString(LocalDate.now().getYear()) + month + userNumber; 
-    		
-    		User IMPSUser = new User();
-            IMPSUser.setFirstName(firstName);
-            IMPSUser.setLastName(lastName);
-            IMPSUser.setEmail(email);
-            IMPSUser.setPassword(password);
-            IMPSUser.setToken("b457sdbfjsdf");
-            IMPSUser.setIsAdmin(false);
-            IMPSUser.setUserID(userID);
-            Created.add(IMPSUser);
-            userRepository.save(IMPSUser);
-            
-    		UserResponse Response = new UserResponse(true, "User created successfully", null, Created);
+    		if(userRepository.findByEmail(email)!=null) {
+    			UserResponse Response = new UserResponse(false, "User email already exists!", null, null);
 
-            return Response;
+                return Response;
+    		}else {
+    			List<User> Created = new ArrayList<>();
+        		String month;
+        		String userNumber;
+        		
+        		// Generating userID logic.
+        		if(LocalDate.now().getMonthValue() < 10) {
+        			month = "0" + Integer.toString(LocalDate.now().getMonthValue());
+        		}else {
+        			month = Integer.toString(LocalDate.now().getMonthValue());
+        		}
+        		
+        		if(userRepository.getAll().size() < 100) {
+        			if (userRepository.getAll().size() < 10) {
+        				userNumber = "00" + Integer.toString(userRepository.getAll().size() + 1);
+        			}else {
+        				userNumber = "0" + Integer.toString(userRepository.getAll().size() + 1);
+        			}
+        		}else {
+        			userNumber = Integer.toString(userRepository.getAll().size() + 1);
+        		}
+        		
+        		// Final userID String.
+        		String userID = Integer.toString(LocalDate.now().getYear()) + month + userNumber; 
+        		
+        		User IMPSUser = new User();
+                IMPSUser.setFirstName(firstName);
+                IMPSUser.setLastName(lastName);
+                IMPSUser.setEmail(email);
+                IMPSUser.setPassword(password);
+                IMPSUser.setToken("b457sdbfjsdf");
+                IMPSUser.setIsAdmin(false);
+                IMPSUser.setUserID(userID);
+                Created.add(IMPSUser);
+                userRepository.save(IMPSUser);
+                
+        		UserResponse Response = new UserResponse(true, "User created successfully", null, Created);
+
+                return Response;
+    		}
+    		
     	}catch(Exception e) {
     		UserResponse Error = new UserResponse(false, "Unable to create new user.", null, null);
 
@@ -124,6 +131,16 @@ public class UserController {
     	}
     }
     
+    @GetMapping(path = "/checkAuth")
+    public @ResponseBody Boolean checkAuthByPass(@RequestParam String email, 
+    		@RequestParam String password) {
+    	if(userRepository.findByEmailAndPassword(email, password) != null) {
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
     
     
     @PostMapping(path = "/ForgotPasswordStep1")
@@ -160,5 +177,29 @@ public class UserController {
     	emailService.sendEmail(email, "IMPS Password Reset","Hello, your password has been successfully changed.");
     	return true;
     }
+    
+    @PostMapping(path = "/newPassword")
+    public @ResponseBody boolean setPassword(@RequestParam String email, @RequestParam String password) {
+    	userRepository.setNewPasswordNoToken(password, email);
+    	emailService.sendEmail(email, "IMPS Password Change","Hello, your password has been successfully changed.");
+    	return true;
+    }
+    
+    @PostMapping(path = "/newEmail")
+    public @ResponseBody boolean setEmail(@RequestParam String newEmail, @RequestParam String email) {
+    	userRepository.setNewEmail(newEmail, email);
+    	emailService.sendEmail(email, "IMPS Email Change","Hello, your email, " +email+ " has been successfully changed to " + newEmail);
+    	emailService.sendEmail(newEmail, "IMPS Email Change","Hello, your email, " +email+ " has been successfully changed to " + newEmail);
+    	return true;
+    }
+    
+    @PostMapping(path = "/newName")
+    public @ResponseBody boolean setEmail(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email) {
+    	userRepository.setNewFirstName(firstName, email);
+    	userRepository.setNewLastName(lastName, email);
+    	return true;
+    }
+    
+    
 
 }
