@@ -118,6 +118,15 @@ public class UserController {
         return userRepository.findByEmail(email);
     }
     
+    @GetMapping(path = "/exists")
+    public @ResponseBody Boolean checkUser(@RequestParam String email) {
+        if(userRepository.findByEmail(email)!=null) {
+        	return true;
+        }else {
+        	return false;
+        }
+    }
+    
     @GetMapping(path = "/getname")
     public @ResponseBody User getEmail(@RequestParam String email) {
         return userRepository.findByEmail(email);
