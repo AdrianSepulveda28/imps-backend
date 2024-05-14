@@ -1,7 +1,9 @@
 package com.imps.IMPS.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,23 +20,31 @@ public class PrintingDetails {
 	
 	private String requestID;
 	
+	private String fileType;
+	
 	private String fileName;
 	
 	private String description;
 	
 	private Integer noOfCopies;
 	
-	private String color;
+	private Boolean color;
+	
+	private Boolean stapled;
+	
+	private Boolean giveExam;
 	
 	private String paperSize;
 	
 	private String bindType;
 	
-	private LocalDate requestDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date requestDate;
 	
 	private LocalDateTime requestTime;
 	
-	private LocalDate useDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date useDate;
 	
 	private String requesterName;
 	
@@ -44,15 +54,23 @@ public class PrintingDetails {
 	
 	private String department;
 	
-	private String comment;
+	private String downloadURL;
 	
-	public PrintingDetails (String filename, String description, Integer noOfCopies, String color, String paperSize,
-			String bindType, LocalDate requestDate, LocalDateTime requestTime, LocalDate useDate, String name, String email,
-			String number, String department, String comment){
+	public PrintingDetails() {}
+
+	
+	public PrintingDetails (String userID, String requestID, String filename, String filetype, String description, Integer noOfCopies, Boolean color, Boolean stapled, Boolean giveExam, String paperSize,
+			String bindType, Date requestDate, LocalDateTime requestTime, Date useDate, String name, String email,
+			String number, String department, String downloadURL){
+		this.setUserID(userID);
+		this.setRequestID(requestID);
 		this.setFileName(filename);
+		this.setFileType(filetype);
 		this.setDescription(description);
 		this.setNoOfCopies(noOfCopies);
 		this.setColor(color);
+		this.setStapled(stapled);
+		this.setGiveExam(giveExam);
 		this.setPaperSize(paperSize);
 		this.setBindType(bindType);
 		this.setRequestDate(requestDate);
@@ -62,7 +80,7 @@ public class PrintingDetails {
 		this.setRequesterEmail(email);
 		this.setRequesterNumber(number);
 		this.setDepartment(department);
-		this.setComment(comment);
+		this.setDownloadURL(downloadURL);
 	}
 
 	public String getFileName() {
@@ -89,11 +107,11 @@ public class PrintingDetails {
 		this.noOfCopies = noOfCopies;
 	}
 
-	public String getColor() {
+	public Boolean getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(Boolean color) {
 		this.color = color;
 	}
 
@@ -113,19 +131,19 @@ public class PrintingDetails {
 		this.bindType = bindType;
 	}
 
-	public LocalDate getRequestDate() {
+	public Date getRequestDate() {
 		return requestDate;
 	}
 
-	public void setRequestDate(LocalDate requestDate) {
+	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
 
-	public LocalDate getUseDate() {
+	public Date getUseDate() {
 		return useDate;
 	}
 
-	public void setUseDate(LocalDate useDate) {
+	public void setUseDate(Date useDate) {
 		this.useDate = useDate;
 	}
 
@@ -161,14 +179,6 @@ public class PrintingDetails {
 		this.department = department;
 	}
 
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
 	public LocalDateTime getRequestTime() {
 		return requestTime;
 	}
@@ -191,6 +201,38 @@ public class PrintingDetails {
 
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public Boolean getStapled() {
+		return stapled;
+	}
+
+	public void setStapled(Boolean stapled) {
+		this.stapled = stapled;
+	}
+
+	public Boolean getGiveExam() {
+		return giveExam;
+	}
+
+	public void setGiveExam(Boolean giveExam) {
+		this.giveExam = giveExam;
+	}
+
+	public String getDownloadURL() {
+		return downloadURL;
+	}
+
+	public void setDownloadURL(String downloadURL) {
+		this.downloadURL = downloadURL;
 	}
 	
 

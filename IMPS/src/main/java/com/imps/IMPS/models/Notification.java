@@ -1,5 +1,7 @@
 package com.imps.IMPS.models;
 
+import java.sql.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,11 +21,22 @@ public class Notification {
 	
 	private String content;
 	
-	public Notification (String requestID, String userID, String header, String content) {
+	private Date createdDate;
+	
+	private Boolean isRead;
+	
+	private Boolean forAdmin;
+	
+	public Notification() {}
+	
+	public Notification (String requestID, String userID, String header, String content, Date createdDate, Boolean forAdmin) {
 		this.setRequestID(requestID);
 		this.setUserID(userID);
 		this.setHeader(header);
 		this.setContent(content);
+		this.setCreatedDate(createdDate);
+		this.setIsRead(false);
+		this.setForAdmin(forAdmin);
 	}
 
 	public String getRequestID() {
@@ -56,5 +69,29 @@ public class Notification {
 
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+	public Boolean getIsRead() {
+		return isRead;
+	}
+
+	public void setIsRead(Boolean isRead) {
+		this.isRead = isRead;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Boolean getForAdmin() {
+		return forAdmin;
+	}
+
+	public void setForAdmin(Boolean forAdmin) {
+		this.forAdmin = forAdmin;
 	}
 }
